@@ -302,33 +302,7 @@ function detectPoseInRealTime(video, net) {
       }
     }
 
-    // poses.forEach(({score, keypoints}) => {
-    //   if (score >= minPoseConfidence) {
-    //     if (guiState.output.showPoints) {
-    //       drawKeypoints(keypoints, minPartConfidence, ctx);
-    //     }
-    //     if (guiState.output.showSkeleton) {
-    //       drawSkeleton(keypoints, minPartConfidence, ctx);
-    //     }
-    //     if (guiState.output.showBoundingBox) {
-    //       drawBoundingBox(keypoints, ctx);
-    //     }
-
-
-    //     var message = new OSC.Message('/pose');
-    //     for (let j = 0; j < keypoints.length; j++) 
-    //     {
-    //       const keypoint = keypoints[j];
-
-    //       const {y, x} = keypoint.position;
-          
-    //       message.add (keypoint.part);
-    //       message.add (x);
-    //       message.add (y);
-    //       osc.send (message);
-    //     }
-    //   }
-    // });
+    
 
     // End monitoring code for frames per second
     stats.end();
