@@ -17,16 +17,19 @@
 import * as posenet from '@tensorflow-models/posenet';
 import dat from 'dat.gui';
 import Stats from 'stats.js';
-
+import io from 'socket.io-client';
 import {drawBoundingBox, drawKeypoints, drawSkeleton} from './demo_util';
 
 const videoWidth = 600;
 const videoHeight = 500;
 const stats = new Stats();
 
-const OSC = require('osc-js');
-var osc = new OSC();
-osc.open();
+// const OSC = require('osc-js');
+// const OSC = require('osc-js');
+// var osc = new OSC();
+// osc.open();
+
+const socket = io('http://192.168.1.28:3000');
 
 function isAndroid() {
   return /Android/i.test(navigator.userAgent);
@@ -283,7 +286,9 @@ function detectPoseInRealTime(video, net) {
         }
 
 
-        var message = new OSC.Message('/pose/' + i);
+      //  var message = new OSC.Message('/pose/' + i);
+      var message='/pose/' + i;
+
         for (let j = 0; j < pose.keypoints.length; j++) 
         {
           const keypoint = pose.keypoints[j];
@@ -292,12 +297,16 @@ function detectPoseInRealTime(video, net) {
              continue;
           }
 
-          const {y, x} = keypoint.position;
-          
-          message.add (keypoint.part);
-          message.add (x);
-          message.add (y);
-          osc.send (message);
+          const {y, x} = keypoint.position;        
+          message+=  (keypoint.part);
+          message+= (x);
+          message+= (y);
+          // only for fish project testing
+          if (keypoint.part =='nose') {
+            message = {"x": x,"y": y}
+            socket.emit('data', message);   
+  
+          }          
         }
       }
     }
